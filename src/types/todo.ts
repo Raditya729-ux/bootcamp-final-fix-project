@@ -10,11 +10,13 @@ export type Note = {
     title: string;
     content: string;
     email: string;
+    due_date?: Date;
   }
   
   export type UpdateNoteDto = {
     title?: string;
     content?: string;
+    due_date?: Date;
   }
   
   export interface NoteFilters {

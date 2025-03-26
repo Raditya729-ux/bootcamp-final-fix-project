@@ -21,6 +21,7 @@ model ToDo {
   updatedAt DateTime @updatedAt
   isDeleted Boolean  @default(false)
   userId    Int
+  dueDate   DateTime?
 
   user User @relation(fields: [userId], references: [id])
 

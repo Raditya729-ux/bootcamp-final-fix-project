@@ -48,6 +48,7 @@ class ToDoRepository {
             updatedAt: true,
             isDeleted: true,
             userId: true,
+            dueDate: true
           },
         }),
         this.prisma.toDo.count({ where }),
@@ -74,6 +75,7 @@ class ToDoRepository {
           updatedAt: true,
           isDeleted: true,
           userId: true,
+          dueDate : true
         },
       });
       return todo ? ToDo.fromEntity(todo) : null;
@@ -101,6 +103,7 @@ class ToDoRepository {
           updatedAt: true,
           isDeleted: true,
           userId: true,
+          dueDate : true
         },
       });
       return ToDo.fromEntity(todo);
@@ -108,6 +111,33 @@ class ToDoRepository {
       return getErrorMessage(error);
     }
   }
+
+  // async create(todoData: CreateNoteDto): Promise<ToDo | string> {
+  //   try {
+  //     const todo = await this.prisma.toDo.create({
+  //       data: {
+  //         title: todoData.title,
+  //         content: todoData.content,
+  //         userId: todoData.userId, // Menggunakan userId langsung
+  //         dueDate: todoData.due_date || null, // Jika tidak ada, tetap null
+  //       },
+  //       select: {
+  //         id: true,
+  //         title: true,
+  //         content: true,
+  //         due_date: true, // Menampilkan due_date
+  //         createdAt: true,
+  //         updatedAt: true,
+  //         isDeleted: true,
+  //         userId: true,
+  //       },
+  //     });
+  //     return ToDo.fromEntity(todo);
+  //   } catch (error) {
+  //     return getErrorMessage(error);
+  //   }
+  // }
+  
 
   async update(id: number, todoData: UpdateNoteDto): Promise<ToDo | string> {
     try {
@@ -124,6 +154,7 @@ class ToDoRepository {
           updatedAt: true,
           isDeleted: true,
           userId: true,
+          dueDate : true
         },
       });
       return ToDo.fromEntity(todo);
@@ -131,6 +162,36 @@ class ToDoRepository {
       return getErrorMessage(error);
     }
   }
+
+  // async update(id: number, todoData: UpdateNoteDto): Promise<ToDo | string> {
+  //   try {
+  //     const { title, content, due_date } = todoData; // Tambahkan due_date
+  
+  //     const todo = await this.prisma.toDo.update({
+  //       where: { id },
+  //       data: {
+  //         ...(title && { title }), // Update hanya jika title ada
+  //         ...(content && { content }), // Update hanya jika content ada
+  //         ...(due_date !== undefined && { due_date }), // Update jika due_date dikirim
+  //       },
+  //       select: {
+  //         id: true,
+  //         title: true,
+  //         content: true,
+  //         due_date: true, // Menampilkan due_date
+  //         createdAt: true,
+  //         updatedAt: true,
+  //         isDeleted: true,
+  //         userId: true,
+  //       },
+  //     });
+  
+  //     return ToDo.fromEntity(todo);
+  //   } catch (error) {
+  //     return getErrorMessage(error);
+  //   }
+  // }
+  
 
   async softDelete(id: number): Promise<ToDo | string> {
     try {
@@ -147,6 +208,7 @@ class ToDoRepository {
           updatedAt: true,
           isDeleted: true,
           userId: true,
+          dueDate : true
         },
       });
       return ToDo.fromEntity(todo);

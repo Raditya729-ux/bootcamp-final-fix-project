@@ -45,7 +45,7 @@ app.use("/api/notes", authorize, notesRouter);
 //   });
 // });
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3500;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
