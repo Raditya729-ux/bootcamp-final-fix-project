@@ -52,18 +52,60 @@ class NoteService {
     return note;
   }
 
+  // async createNote(noteData: CreateNoteDto): Promise<Note | string> {
+  //   if (!noteData.title || !noteData.content) {
+  //     return "Title and content are required";
+  //   }
+
+  //   const result = await this.noteRepository.create(noteData);
+  //   if (typeof result === "string") {
+  //     return result;
+  //   }
+
+  //   return result;
+  // }
   async createNote(noteData: CreateNoteDto): Promise<Note | string> {
     if (!noteData.title || !noteData.content) {
       return "Title and content are required";
     }
-
-    const result = await this.noteRepository.create(noteData);
+  
+    const dueDate = noteData.dueDate 
+      ? new Date(noteData.dueDate) 
+      : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // Default 7 hari ke depan
+  
+    const result = await this.noteRepository.create({
+      ...noteData,
+      dueDate, // Tambahkan dueDate ke dalam pembuatan note
+    });
+  
     if (typeof result === "string") {
       return result;
     }
-
+  
     return result;
   }
+
+  // async updateNote(
+  //   userId: number,
+  //   id: number,
+  //   noteData: UpdateNoteDto
+  // ): Promise<Note | string> {
+  //   const existingNote = await this.noteRepository.findById(id, userId);
+  //   if (typeof existingNote === "string") {
+  //     return existingNote;
+  //   }
+
+  //   if (!existingNote) {
+  //     return "Note not found";
+  //   }
+
+  //   const result = await this.noteRepository.update(id, noteData);
+  //   if (typeof result === "string") {
+  //     return result;
+  //   }
+
+  //   return result;
+  // }
 
   async updateNote(
     userId: number,
@@ -74,16 +116,24 @@ class NoteService {
     if (typeof existingNote === "string") {
       return existingNote;
     }
-
+  
     if (!existingNote) {
       return "Note not found";
     }
-
-    const result = await this.noteRepository.update(id, noteData);
+  
+    // const result = await this.noteRepository.update(id, {
+    //   ...noteData,
+    //   dueDate: noteData.dueDate ? new Date(noteData.dueDate) : existingNote.dueDate, // Perbarui dueDate jika dikirim
+    // });
+    const result = await this.noteRepository.update(id, {
+      ...noteData,
+      dueDate: noteData.dueDate ? new Date(noteData.dueDate) : undefined, // ✅ FIXED!
+    });
+  
     if (typeof result === "string") {
       return result;
     }
-
+  
     return result;
   }
 

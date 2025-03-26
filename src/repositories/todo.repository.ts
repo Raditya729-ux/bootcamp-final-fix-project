@@ -90,6 +90,7 @@ class ToDoRepository {
         data: {
           title: todoData.title,
           content: todoData.content,
+          dueDate: todoData.dueDate,
           user: {
             connect: { email: todoData.email },
           },
@@ -139,12 +140,37 @@ class ToDoRepository {
   // }
   
 
+  // async update(id: number, todoData: UpdateNoteDto): Promise<ToDo | string> {
+  //   try {
+  //     const todo = await this.prisma.toDo.update({
+  //       where: { id },
+  //       data: {
+  //         ...todoData,
+  //       },
+  //       select: {
+  //         id: true,
+  //         title: true,
+  //         content: true,
+  //         createdAt: true,
+  //         updatedAt: true,
+  //         isDeleted: true,
+  //         userId: true,
+  //         dueDate : true
+  //       },
+  //     });
+  //     return ToDo.fromEntity(todo);
+  //   } catch (error) {
+  //     return getErrorMessage(error);
+  //   }
+  // }
+
   async update(id: number, todoData: UpdateNoteDto): Promise<ToDo | string> {
     try {
-      const todo = await this.prisma.toDo.update({
+      const updatedTodo = await this.prisma.toDo.update({
         where: { id },
         data: {
           ...todoData,
+          dueDate: todoData.dueDate ? new Date(todoData.dueDate) : undefined, // Konversi dueDate jika dikirim
         },
         select: {
           id: true,
@@ -154,14 +180,16 @@ class ToDoRepository {
           updatedAt: true,
           isDeleted: true,
           userId: true,
-          dueDate : true
+          dueDate: true,
         },
       });
-      return ToDo.fromEntity(todo);
+  
+      return ToDo.fromEntity(updatedTodo);
     } catch (error) {
       return getErrorMessage(error);
     }
   }
+  
 
   // async update(id: number, todoData: UpdateNoteDto): Promise<ToDo | string> {
   //   try {

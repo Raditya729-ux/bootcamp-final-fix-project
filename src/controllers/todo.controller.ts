@@ -92,6 +92,38 @@ class NoteController {
     }
   }
 
+  // async createNote(req: AuthRequest, res: Response, next: NextFunction) {
+  //   try {
+  //     if (!req.user) {
+  //       return res.status(500).json({
+  //         success: false,
+  //         message: "Unauthorized",
+  //       });
+  //     }
+
+  //     const result = await this.noteService.createNote({
+  //       content: req.body.content,
+  //       title: req.body.title,
+  //       email: req.user.email,
+  //     });
+
+  //     if (typeof result === "string") {
+  //       return res.status(400).json({
+  //         success: false,
+  //         message: result,
+  //       });
+  //     }
+
+  //     res.status(201).json({
+  //       success: true,
+  //       message: responses.successCreateNote,
+  //       data: result.toDTO(),
+  //     });
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // }
+
   async createNote(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       if (!req.user) {
@@ -100,20 +132,23 @@ class NoteController {
           message: "Unauthorized",
         });
       }
-
+  
       const result = await this.noteService.createNote({
         content: req.body.content,
         title: req.body.title,
         email: req.user.email,
+        dueDate: req.body.dueDate 
+          ? new Date(req.body.dueDate) 
+          : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Default 7 hari ke depan
       });
-
+  
       if (typeof result === "string") {
         return res.status(400).json({
           success: false,
           message: result,
         });
       }
-
+  
       res.status(201).json({
         success: true,
         message: responses.successCreateNote,
